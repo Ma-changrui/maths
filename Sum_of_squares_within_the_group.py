@@ -1,11 +1,11 @@
 from decimal import Decimal, getcontext, InvalidOperation
 
-# 根据需要调整精度位数，默认28位
+# 根据需要调整精度位数
 getcontext().prec = 100
 
 numbers = []
 
-# 输入部分（你原来的）
+# 输入部分
 while True:
     number = input("输入数字(输入'q'退出)：")
     if number == 'q':
