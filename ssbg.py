@@ -22,7 +22,13 @@ def user_input():
 
 
 def average_value(data):
-    '''计算所有分割点的左右两组平均值，返回列表 [(i, left_mean, right_mean), ...]'''
+    '''计算所有分割点的左右两组及其平均值，
+    返回列表 [(i, left, right, left_mean, right_mean), ...]
+    i:          分割位置
+    left:       左边分组
+    right:      右边分组
+    left_mean:  左边平均值
+    right_mean: 右边平均值'''
     n = len(data)
     results = []
     for i in range(0, n - 1):          # i 从 0 到 n-2
@@ -32,15 +38,7 @@ def average_value(data):
         left_mean = sum(left) / len(left)
         right_mean = sum(right) / len(right)
         
-        results.append((i, left_mean, right_mean))
+        results.append((i, left, right, left_mean, right_mean))
     
     return results
 
-
-if __name__ == '__main__':
-    numbers = user_input()
-    print(numbers)
-    means = average_value(numbers)
-    print(means)
-    for i, lm, rm in means:
-        print(f"i={i}: 左组均值 = {lm}, 右组均值 = {rm}")

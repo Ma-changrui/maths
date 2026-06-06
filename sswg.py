@@ -1,50 +1,48 @@
-from decimal import Decimal, getcontext, InvalidOperation
+from decimal import Decimal, getcontext
+from ssbg import user_input, average_value
 
 # 根据需要调整精度位数
-getcontext().prec = 100
+getcontext().prec = 10
 
-numbers = []
+# 输入部分：直接调用 ssbg 中的 user_input 函数
+numbers = user_input()
 
-# 输入部分
-while True:
-    number = input("输入数字(输入'q'退出)：")
-    if number == 'q':
-        break
-    else:
-        try:
-            num = Decimal(number)
-        except (ValueError, InvalidOperation):
-            print('必须为数字！')
-        else:
-            numbers.append(num)
+while len(numbers) < 2:
+    print("至少需要输入 2 个数字才能分组。")
+    numbers = user_input()
 
-numbers.sort()
-n = len(numbers)
+# 调用 ssbg 获取所有分割点的分组及均值
+groups = average_value(numbers)
 
-best_i = None
-best_ssw = Decimal('Infinity')
+results = []
 
-for i in range(0, n - 1):          # i 从 0 到 n-2
-    left = numbers[:i+1]           # 包含 i 位置的元素
-    right = numbers[i+1:]          # 取 i 后面剩余的全部
-    
-    left_mean = sum(left) / len(left)
-    right_mean = sum(right) / len(right)
-    
+# 遍历已算好的 (i, left, right, left_mean, right_mean)，纯比较
+print("\n" + "─" * 48)
+
+for i, left, right, left_mean, right_mean in groups:
     # 直接计算组内离差平方和
-    ssw = sum((x - left_mean) ** 2 for x in left) + sum((x - right_mean) ** 2 for x in right)
-    
-    
-    left_str = [str(x) for x in left]   # 每个 Decimal 转成字符串 '1', '2' 等
-    right_str = [str(x) for x in right]
-    print(f"i={i}: 左组 {left_str}, 右组 {right_str}, 组内离差平方和 = {ssw}")
-    
-    if ssw < best_ssw:
-        best_ssw = ssw
-        best_i = i
+    ssw = sum((x - left_mean) ** 2 for x in left) + \
+        sum((x - right_mean) ** 2 for x in right)
 
-best_left = numbers[:best_i+1]
-best_right = numbers[best_i+1:]
-print(f"\n最佳分组：左组 {best_left}, 右组 {best_right}")
-print(f"最小组内离差平方和 = {best_ssw}")
-print(f'四舍五入到0.0001：{best_ssw:.4f}')
+    left_str = ', '.join(str(x) for x in left)
+    right_str = ', '.join(str(x) for x in right)
+    print(f"方案 {i + 1}")
+    print(f"  左组: {left_str}")
+    print(f"  右组: {right_str}")
+    print(f"  SSW = {ssw}")
+    print("─" * 48)
+
+    results.append((ssw, left, right))
+
+# min 按元组第一个元素 (ssw) 比较，解包拿到最优组合
+best_ssw, best_left, best_right = min(results)
+
+print(f"\n{'  ✨ 最优分组 ':=^48}")
+print(f"  左组: {', '.join(str(x) for x in best_left)}")
+print(f"  右组: {', '.join(str(x) for x in best_right)}")
+print(f"  最小组内离差平方和 = {best_ssw}")
+if best_ssw.adjusted() <= 10:   # 指数 <= 10 时才认为可以量化到 0.0001
+    print(f"  四舍五入到 0.0001 = {format(best_ssw, '.4f')}")
+else:
+    print(f"  数值过大，使用科学计数法 = {format(best_ssw, '.4e')}")
+print("=" * 52)
