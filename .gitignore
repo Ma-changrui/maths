@@ -17,3 +17,6 @@ Thumbs.db
 
 .env
 *.key
+# 生成可执行文件的文件夹
+build/
+dist/
