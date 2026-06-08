@@ -15,3 +15,5 @@
 让程序能处理EOFError错误    
 添加了语言选择  
 新增了Linux的可执行文件
+#### 呜呜呜气死我了明天又要回学校了  
+I'm so angry. I have to go back to prison tomorrow.
