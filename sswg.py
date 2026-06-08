@@ -1,4 +1,4 @@
-from decimal import Decimal, getcontext
+from decimal import getcontext
 from ssbg import user_input, average_value
 
 # 根据需要调整精度位数
