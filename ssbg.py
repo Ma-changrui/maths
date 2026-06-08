@@ -41,4 +41,3 @@ def average_value(data):
         results.append((i, left, right, left_mean, right_mean))
     
     return results
-
