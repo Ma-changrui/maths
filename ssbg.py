@@ -4,19 +4,23 @@ getcontext().prec = 100
 
 
 def user_input():
-    '''获取用户输入，返回排序后的列表'''
+    '''获取用户输入'''
     numbers = []
     while True:
-        number = input("输入数字(输入'q'退出)：")
+        try:
+            number = input("输入数字(输入'q'退出)：")
+        except EOFError:
+            if not numbers:
+                raise      # 没有数字时向上抛出 EOFError
+            break
         if number == 'q':
             break
+        try:
+            num = Decimal(number)
+        except (ValueError, InvalidOperation):
+            print('必须为数字！')
         else:
-            try:
-                num = Decimal(number)
-            except (ValueError, InvalidOperation):
-                print('必须为数字！')
-            else:
-                numbers.append(num)
+            numbers.append(num)
     numbers.sort()
     return numbers
 

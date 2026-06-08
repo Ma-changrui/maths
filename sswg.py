@@ -1,15 +1,22 @@
-from decimal import Decimal, getcontext
+from decimal import getcontext
 from ssbg import user_input, average_value
 
 # 根据需要调整精度位数
 getcontext().prec = 10
 
 # 输入部分：直接调用 ssbg 中的 user_input 函数
-numbers = user_input()
+while True:
+    try:
+        numbers = user_input()
+    except EOFError:
+        print("\n检测到输入中断（EOF），请重新输入。")
+        continue
 
-while len(numbers) < 2:
-    print("至少需要输入 2 个数字才能分组。")
-    numbers = user_input()
+    if len(numbers) >= 2:
+        break
+    else:
+        print("至少需要输入 2 个数字，请重新输入。\n")
+
 
 # 调用 ssbg 获取所有分割点的分组及均值
 groups = average_value(numbers)
@@ -35,6 +42,10 @@ for i, left, right, left_mean, right_mean in groups:
     results.append((ssw, left, right))
 
 # min 按元组第一个元素 (ssw) 比较，解包拿到最优组合
+if not results:
+    print("\n没有可用的分组结果，程序退出。")
+    exit(0)
+
 best_ssw, best_left, best_right = min(results)
 
 print(f"\n{'  ✨ 最优分组 ':=^48}")
