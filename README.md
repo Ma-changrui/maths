@@ -17,3 +17,7 @@
 新增了Linux的可执行文件
 #### 呜呜呜气死我了明天又要回学校了  
 I'm so angry. I have to go back to prison tomorrow.
+
+### 9日
+牺牲了一点头发重构了获取输入的函数
+#### 气活了要come back监狱了
